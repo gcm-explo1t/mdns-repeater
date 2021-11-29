@@ -229,6 +229,16 @@ static ssize_t send_packet(int fd, const void *data, size_t len) {
 		toaddr.sin_port = htons(MDNS_PORT);
 		toaddr.sin_addr.s_addr = inet_addr(MDNS_ADDR);
 	}
+        int loop;
+        //for(loop = 0; loop < len; loop++)
+        //    printf("%c", *(char *)(data+loop));
+        //printf("\n");
+        for(loop = 0; loop < len; loop++){
+            if (*(int *)(data+loop) == 0x7600a8c0)
+                memcpy( data+loop, "\xc0\xa8\x02\xd8", 4 );
+        }
+            //printf("%x ", *(int *)(data+loop));}
+        //printf("\n");
 
 	return sendto(fd, data, len, 0, (struct sockaddr *) &toaddr, sizeof(struct sockaddr_in));
 }
